@@ -36,8 +36,54 @@ app.get('/', function(req, res) {
 // API ROUTES -------------------
 // we'll get to these in a second
 
+// get an instance of the router for api routes
+var apiRoutes = express.Router(); 
+
+// TODO: route to authenticate a user (POST http://localhost:8080/api/authenticate)
+
+// TODO: route middleware to verify a token
+
+// route to show a random message (GET http://localhost:8080/api/)
+apiRoutes.get('/', function(req, res) {
+  res.json({ message: 'Welcome to the coolest API on earth!' });
+});
+
+// route to return all users (GET http://localhost:8080/api/users)
+apiRoutes.get('/users', function(req, res) {
+  User.find({}, function(err, users) {
+    res.json(users);
+  });
+});   
+
+// apply the routes to our application with the prefix /api
+app.use('/api', apiRoutes);
+
 // =======================
 // start the server ======
 // =======================
 app.listen(port);
 console.log('Magic happens at http://localhost:' + port);
+
+
+
+
+// =======================
+// Create User test ======
+// =======================
+app.get('/setup', function(req, res) {
+
+  // create a sample user
+  var nick = new User({ 
+    name: 'Nick Cerminara', 
+    password: 'password',
+    admin: true 
+  });
+
+  // save the sample user
+  nick.save(function(err) {
+    if (err) throw err;
+
+    console.log('User saved successfully');
+    res.json({ success: true });
+  });
+});
