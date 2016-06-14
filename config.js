@@ -1,4 +1,4 @@
 module.exports = {
-    'secret': 'ilovescotchyscotch',
-    'database': 'mongodb://localhost/api'
+    'secret':  process.env.SECRET || 'mysecretkey',
+    'database':  process.env.MONGOURL || 'mongodb://localhost/api'
 };

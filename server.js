@@ -64,7 +64,7 @@ apiRoutes.post('/authenticate', function(req, res) {
 
   // find the user
   User.findOne({
-    name: req.body.name
+    username: req.body.name
   }, function(err, user) {
 
     if (err) throw err;
@@ -74,22 +74,25 @@ apiRoutes.post('/authenticate', function(req, res) {
     } else if (user) {
 
       // check if password matches
-      if (user.password != req.body.password) {
-        res.json({ success: false, message: 'Authentication failed. Wrong password.' });
-      } else {
+      user.comparePassword(req.body.password, function(err, isMatch) {
+          if (err) throw err;
+          
+          if (!isMatch) {
+            res.json({ success: false, message: 'Authentication failed. Wrong password.' });
+          } else {
 
-        // if user is found and password is right
-        // create a token        
-        var token = jwt.sign(user, app.get('superSecret'));
+            // if user is found and password is right
+            // create a token        
+            var token = jwt.sign(user, app.get('superSecret'));
 
-        // return the information including token as JSON
-        res.json({
-          success: true,
-          message: 'Enjoy your token!',
-          token: token
-        });
-      }   
-
+            // return the information including token as JSON
+            res.json({
+              success: true,
+              message: 'Enjoy your token!',
+              token: token
+            });
+          }
+      });
     }
 
   });
@@ -107,20 +110,29 @@ console.log('Magic happens at http://localhost:' + port);
 // =======================
 // Create User test ======
 // =======================
-app.get('/setup', function(req, res) {
+app.post('/setup', function(req, res) {
 
   // create a sample user
   var nick = new User({ 
-    name: 'Juan', 
+    username: 'Juan22', 
     password: 'Juan',
+    email: 'casdl@asd-s.cl',
     admin: true 
   });
 
   // save the sample user
   nick.save(function(err) {
-    if (err) throw err;
+    if (err) {
+      var msg = '';
+      if (err.hasOwnProperty('errmsg'))
+        msg = err.errmsg;
+      else msg = err.errors;
 
-    console.log('User saved successfully');
-    res.json({ success: true });
+      console.error(err);
+      res.status(500).json({message: msg}).end();
+    }else{
+      console.log('User saved successfully');
+      res.status(200).json({ success: true }).end();
+    }
   });
 });

@@ -1,5 +1,5 @@
 {
-  "name": "node-token-jwt",
+  "name": "ivdevs-auth-api",
   "version": "1.0.0",
   "description": "",
   "main": "server.js",
@@ -9,10 +9,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^0.8.7",
     "body-parser": "^1.15.1",
     "express": "^4.13.4",
     "jsonwebtoken": "^7.0.0",
     "mongoose": "^4.4.19",
+    "mongoose-validator": "^1.2.5",
     "morgan": "^1.7.0"
   }
 }
