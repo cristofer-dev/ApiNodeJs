@@ -50,9 +50,9 @@ app.post('/setup', function(req, res) {
 
     // create a sample user
     var nick = new User({
-        username: 'Juan22',
+        username: 'Juan',
         password: 'Juan',
-        email: 'casdl@asd-s.cl',
+        email: 'casdl@asd.cl',
         admin: true
     });
 

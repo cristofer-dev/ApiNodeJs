@@ -5,28 +5,30 @@ var mongoose = require('mongoose'),
     SALT_WORK_FACTOR = 10,
     validate = require('mongoose-validator');
 
-var emailValidator = [
-  validate({
-    validator: 'isEmail',
-    passIfEmpty: false,
-    message: 'Please fill a valid email address'
-  })
+const emailValidator = [
+    validate({
+        validator: 'isEmail',
+        passIfEmpty: false,
+        message: 'Please fill a valid email address'
+    })
 ];
 
-var userSchema = new Schema({ 
+var userSchema = new Schema({
     username: {
-        type: String, 
+        type: String,
         required: true,
-        index: { unique: true }
+        index: {
+            unique: true
+        }
     },
-    fullname:{
+    fullname: {
         type: String
     },
     password: {
-        type: String, 
-        required:true
+        type: String,
+        required: true
     },
-    email:{ 
+    email: {
         type: String,
         required: true,
         unique: true,
@@ -37,10 +39,16 @@ var userSchema = new Schema({
     verificationToken: String,
     meta: {
         birthday: Date,
+        bio: String,
+        avatar: String,
         twitter: String,
-        facebook:String,
+        facebook: String,
         web: String
-    }, 
+    },
+    category: {
+        level: String,
+        points: Number
+    },
     admin: Boolean,
     created_at: Date,
     updated_at: Date
@@ -54,33 +62,33 @@ userSchema.methods.comparePassword = function(candidatePassword, cb) {
 };
 
 userSchema.pre('save', function(next) {
-  var user = this;
-  // get the current date
-  var currentDate = new Date();
-  
-  // change the updated_at field to current date
-  user.updated_at = currentDate;
+    var user = this;
+    // get the current date
+    var currentDate = new Date();
 
-  // if created_at doesn't exist, add to that field
-  if (!user.created_at)
-    user.created_at = currentDate;
+    // change the updated_at field to current date
+    user.updated_at = currentDate;
 
-  // only hash the password if it has been modified (or is new)
-  if (!user.isModified('password')) return next();
-  
-  // generate a salt
-  bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
-    if (err) return next(err);
+    // if created_at doesn't exist, add to that field
+    if (!user.created_at)
+        user.created_at = currentDate;
 
-    // hash the password along with our new salt
-    bcrypt.hash(user.password, salt, function(err, hash) {
+    // only hash the password if it has been modified (or is new)
+    if (!user.isModified('password')) return next();
+
+    // generate a salt
+    bcrypt.genSalt(SALT_WORK_FACTOR, function(err, salt) {
         if (err) return next(err);
 
-        // override the cleartext password with the hashed one
-        user.password = hash;
-        next();
+        // hash the password along with our new salt
+        bcrypt.hash(user.password, salt, function(err, hash) {
+            if (err) return next(err);
+
+            // override the cleartext password with the hashed one
+            user.password = hash;
+            next();
+        });
     });
-  });
 });
 
 // Establece el modelo de mongoose y lo pasa usando module.exports
