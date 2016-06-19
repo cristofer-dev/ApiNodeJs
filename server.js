@@ -52,8 +52,7 @@ app.post('/setup', function(req, res) {
     var nick = new User({
         username: 'Juan',
         password: 'Juan',
-        email: 'casdl@asd.cl',
-        admin: true
+        email: 'casdl@asd.cl'
     });
 
     // save the sample user
@@ -62,7 +61,9 @@ app.post('/setup', function(req, res) {
             var msg = '';
             if (err.hasOwnProperty('errmsg'))
                 msg = err.errmsg;
-            else msg = err.errors;
+            else if (err.hasOwnProperty('errors'))
+                msg = err.errors;
+            else msg = err.message;
 
             console.error(err);
             res.status(500).json({

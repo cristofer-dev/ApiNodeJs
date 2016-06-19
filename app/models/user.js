@@ -33,13 +33,21 @@ var userSchema = new Schema({
         required: true,
         unique: true,
         lowercase: true,
-        validate: emailValidator
+        validate: emailValidator,
+        index: true
     },
-    emailVerified: Boolean,
+    emailVerified: {
+        type: Boolean,
+        default: false
+    },
     verificationToken: String,
     meta: {
         birthday: Date,
         bio: String,
+        organization: {
+            institution: String,
+            position: String
+        },
         avatar: String,
         twitter: String,
         facebook: String,
@@ -49,7 +57,10 @@ var userSchema = new Schema({
         level: String,
         points: Number
     },
-    admin: Boolean,
+    admin: {
+        type: Boolean,
+        default: false
+    },
     created_at: Date,
     updated_at: Date
 });
@@ -61,7 +72,7 @@ userSchema.methods.comparePassword = function(candidatePassword, cb) {
     });
 };
 
-userSchema.pre('save', function(next) {
+userSchema.pre('save', function(next, done) {
     var user = this;
     // get the current date
     var currentDate = new Date();
@@ -73,6 +84,10 @@ userSchema.pre('save', function(next) {
     if (!user.created_at)
         user.created_at = currentDate;
 
+    if ((user.isNew && user.admin) || (!user.isNew && user.isModified('admin'))) {
+        var err = new Error('admin field is not allowed to modified');
+        return next(err);
+    }
     // only hash the password if it has been modified (or is new)
     if (!user.isModified('password')) return next();
 
