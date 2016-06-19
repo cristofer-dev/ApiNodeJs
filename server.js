@@ -5,14 +5,13 @@ var morgan = require('morgan');
 var mongoose = require('mongoose');
 const assert = require('assert');
 
-var jwt = require('jsonwebtoken'); // used to create, sign, and verify tokens
 var config = require('./config'); // get our config file
 var User = require('./app/models/user'); // get our mongoose model
 
 // =======================
 // configuration =========
 // =======================
-var port = process.env.PORT || 8080; // used to create, sign, and verify tokens
+var port = process.env.PORT || 8080;
 mongoose.connect(config.database, function(err, db) {
     assert.equal(err, null);
 }); // connect to database
@@ -41,39 +40,3 @@ app.use('/api', users);
 // =======================
 app.listen(port);
 console.log('Magic happens at http://localhost:' + port);
-
-
-// =======================
-// Create User test ======
-// =======================
-app.post('/setup', function(req, res) {
-
-    // create a sample user
-    var nick = new User({
-        username: 'Juan',
-        password: 'Juan',
-        email: 'casdl@asd.cl'
-    });
-
-    // save the sample user
-    nick.save(function(err) {
-        if (err) {
-            var msg = '';
-            if (err.hasOwnProperty('errmsg'))
-                msg = err.errmsg;
-            else if (err.hasOwnProperty('errors'))
-                msg = err.errors;
-            else msg = err.message;
-
-            console.error(err);
-            res.status(500).json({
-                message: msg
-            }).end();
-        } else {
-            console.log('User saved successfully');
-            res.status(200).json({
-                success: true
-            }).end();
-        }
-    });
-});
