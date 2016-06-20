@@ -1,7 +1,7 @@
 // Crea una instancia de mongoose y mongoose.Schema
 var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
-    bcrypt = require('bcrypt'),
+    bcrypt = require('bcryptjs'),
     SALT_WORK_FACTOR = 10,
     validate = require('mongoose-validator');
 
