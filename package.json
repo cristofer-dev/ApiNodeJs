@@ -1,20 +1,22 @@
 {
-  "name": "ivdevs-auth-api",
-  "version": "1.0.0",
-  "description": "",
-  "main": "server.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "bcrypt": "^0.8.7",
-    "body-parser": "^1.15.1",
-    "express": "^4.13.4",
-    "jsonwebtoken": "^7.0.0",
-    "mongoose": "^4.4.19",
-    "mongoose-validator": "^1.2.5",
-    "morgan": "^1.7.0"
-  }
+    "name": "ivdevs-auth-api",
+    "version": "1.0.0",
+    "description": "",
+    "main": "server.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "bcrypt": "^0.8.7",
+        "body-parser": "^1.15.1",
+        "express": "^4.13.4",
+        "generate-key": "0.0.6",
+        "jsonwebtoken": "^7.0.0",
+        "mongoose": "^4.4.19",
+        "mongoose-validator": "^1.2.5",
+        "morgan": "^1.7.0",
+        "sendgrid": "^2.0.0"
+    }
 }
