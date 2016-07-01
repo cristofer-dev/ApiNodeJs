@@ -23,7 +23,7 @@ router.get('/user', validateToken, function(req, res) {
     var user = req.decoded._doc;
     var filters = {};
 
-    if (user.admin) {
+    if (!user.admin) {
         filters._id = user._id;
     }
     console.log(filters);
