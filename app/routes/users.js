@@ -123,7 +123,19 @@ router.post('/user/signup', function(req, res) {
 });
 
 router.put('/user/', validateToken, function(req, res) {
-    //TODO: editar usuario
+    var id = req.body._id;
+    var new_user = new User(req.body);
+
+    User.findById(id, function(err, usuario){  
+
+        usuario.fullname = req.body.fullname;
+        // debo hacerlo campo por campo?
+
+        usuario.save(function(err){
+            if(err){res.send(err)}
+            res.json(usuario);
+        })        
+    })
 });
 
 router.get('/user/activation/:token', function(req, res) {
