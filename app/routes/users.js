@@ -124,18 +124,14 @@ router.post('/user/signup', function(req, res) {
 
 router.put('/user/', validateToken, function(req, res) {
     var id = req.body._id;
-    var new_user = new User(req.body);
+    var user_post = new User(req.body);
 
-    User.findById(id, function(err, usuario){  
-
-        usuario.fullname = req.body.fullname;
-        // debo hacerlo campo por campo?
-
-        usuario.save(function(err){
-            if(err){res.send(err)}
-            res.json(usuario);
-        })        
+    var $match = {_id: id }    
+    User.update($match,{ $set : user_post } ,function(err, data){
+        if(err){res.send(err)}
+        res.status(200).json(data).end();
     })
+
 });
 
 router.get('/user/activation/:token', function(req, res) {
